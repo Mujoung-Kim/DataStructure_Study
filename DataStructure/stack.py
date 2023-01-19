@@ -1,5 +1,6 @@
 # TODO 개념 정리 후 코드 작성
 
+# TODO 조건식에 맞는 stack 구조로 변경
 # 입력값 조건
 # 첫째 줄에 주어지는 명령의 수 N (1 ≤ N ≤ 10,000)이 주어진다.
 # 둘째 줄부터 N개의 줄에는 명령이 하나씩 주어진다.
@@ -16,7 +17,6 @@
 # top					-1
 # pop					-1
 
-# TODO 기본 기능 뼈대
 class Stack(list) :
 
 	# 정수 X를 스택에 넣는 연산이다.
@@ -26,13 +26,11 @@ class Stack(list) :
 	# 스택에서 가장 위에 있는 정수를 빼고, 그 수를 출력한다.
 	# 만약 스택에 들어있는 정수가 없는 경우에는 -1을 출력한다.
 	# x -> pop()을 재귀호출로 인해서 실행이 안되는 것임
-	# def pop(self) :
-	# 	if len(self) == 0 :
-	# 		return -1
-	# 	else :
-	# 		# self.pop(len(self))
-	# 		# return self.pop(len(self) - 1)
-	# 		return len(self) - 1
+	def pop(self) :
+		if len(self) == 0 :
+			return -1
+		else :
+			del self[len(self) - 1]
 
 	# 스택의 가장 위에 있는 정수를 출력한다.
 	# 만약 스택에 들어있는 정수가 없는 경우에는 -1을 출력한다.
@@ -57,15 +55,20 @@ class Stack(list) :
 if __name__ == '__main__' :
 	test_stack = Stack()
 	print('Test bed')
-	# print(test_stack.empty())
+	print(test_stack.empty())
 	# print(test_stack.top())
 	# test_stack.push(1)
-	# print(test_stack.top())
-	# test_stack.push(10)
-	# test_stack.push(100)
-	# print(test_stack.size())
-	# print(test_stack.top())
-	print('pop = ', test_stack.pop(test_stack.size() - 1))
+	print(test_stack.pop())
+	print(test_stack.top())
+	test_stack.push(10)
+	print(test_stack)
+	test_stack.push(100)
+	print(test_stack)
+	print(test_stack.size())
+	print(test_stack.top())
+	test_stack.pop()
+	print(test_stack.size())
+	print(test_stack)
 	print('empty = ', test_stack.empty())
 	# print(test_stack.top())
 	print(test_stack)

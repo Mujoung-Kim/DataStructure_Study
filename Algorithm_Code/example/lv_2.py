@@ -12,18 +12,21 @@
 # TODO : section의 elements가 m보다 큰 경우 몫계산법으로 안됨.
 # 자 이제 exception만 해결하면 날먹으로 쌉가능
 def solution(n, m, section) :
-    result = None
+    result = 0
 
     if m > section[len(section) - 1] - section[0] :
         result = n // m
     else :
-        result = 'exception!!'
+        for val in section :
+            for v in list(range(1, n)) :
+                if val in list(range(v, m)) :
+                    result += 1
     
     return result
 
-section = [2, 3, 6]
+section = [1, 6]
 
 # test bed
 if __name__ == '__main__' :
-    print(solution(6, 3, section))
+    print(solution(6, 5, section))
     pass

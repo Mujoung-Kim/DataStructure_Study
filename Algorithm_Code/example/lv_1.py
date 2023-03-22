@@ -418,11 +418,255 @@ def solution(id_list, report, k) :
 
     # return result
 
+# 숫자 문자열과 영단어
+# 규칙
+# 숫자의 일부 자릿수를 영단어로 바꾼다.
+# 일부 숫자는 바뀌거나 바뀌지 않거나 ㅁ?ㄹ
+# 바꾸기 전의 값을 그대로 반환해라.
+
+# 조건
+# 1 <= len(s) <= 50
+# s는 zero or 0으로 시작하지 않는다.
+# 1 <= s <= 2000000000
+# s -> int
+# 10초안에 결과 도출
+
+# input / output
+# s                     result
+# "one4seveneight"	    1478
+# "23four5six7"	        234567
+# "2three45sixseven"    234567
+# "123"	                123
+
+# 일단 시간복잡도는 개나 줬음
+def solution(s) :
+    alpha_list = {'zero' : 0, 'one' : 1, 'two' : 2, 'three' : 3, 
+                  'four' : 4, 'five' : 5, 'six' : 6, 'seven' : 7, 
+                  'eight' : 8, 'nine' : 9}
+    result, tmp = '', []
+
+    for val in list(s) :
+        if val.isalpha() == True :
+            result += val
+            if result in alpha_list.keys() :
+                tmp.append(alpha_list.get(result))
+                result = result.replace(result, '')
+        elif val.isdecimal() == True :
+            tmp.append(val)
+
+    for val in tmp :
+        result += str(val)
+
+    return int(result)
+
+# 다른 풀이
+def solution(s) :
+    alpha_list = {'zero' : 0, 'one' : 1, 'two' : 2, 'three' : 3, 
+                'four' : 4, 'five' : 5, 'six' : 6, 'seven' : 7, 
+                'eight' : 8, 'nine' : 9}
+    result = s
+
+    for key, value in alpha_list.items() :
+        result = result.replace(key, value)
+
+    return int(result)
+
+# list 풀이
+def solution(s):
+    words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 
+             'seven', 'eight', 'nine']
+
+    for i in range(len(words)):
+        s = s.replace(words[i], str(i))
+
+    return int(s)
+
+# 신규 아이디 추천
+# 규칙
+# id의 길이는 3 <= id <= 15
+# id는 ascii_lowercase, 0 ~ 9, -, _, .만 사용가능
+# .는 처음과 끝에 쓸 수 없으며 연속해서도 사용할 수 없다.
+# 1 단계 : new_id -> lower()
+# 2 단계 : new_id -> 이용 가능한 문자를 제외한 모든 문자 제거
+# 3 단계 : new_id -> .이 연속해서 나오면 하나의 .으로 변경
+# 4 단계 : new_id -> .이 처음과 끝에 존재한다면 제거
+# 5 단계 : new_id -> 빈 문자열이라면 a를 대입
+# 6 단계 : new_id -> 길이가 16자 이상이라면 제거 
+#                    만약 제거후 15번째 글자에 .이 존재한다면 제거
+# 7 단계 : new_id -> 2자 이하라면 마지막 문자를 3자가 되도록 반복
+
+# 조건
+# 1 <= new_id <= 1000
+# id.values in ascii_lowercase, 0 ~ 9, -, _, .
+# new_id에 들어오는 특수문자는 -_.~!@#$%^&*()=+[{]}:?,<>/로 한정
+
+# input / output
+# no	new_id	                        result
+# 예1	"...!@BaT#*..y.abcdefghijklm"	"bat.y.abcdefghi"
+# 예2	"z-+.^."	                    "z--"
+# 예3	"=.="	                        "aaa"
+# 예4	"123_.def"	                    "123_.def"
+# 예5	"abcdefghijklmn.p"	            "abcdefghijklmn"
+
+import re
+
+# ?? 어디서 예외가 발생하는 거지?
+def solution(new_id) :
+    per_str = list(ascii_lowercase + '-' + '_' + '.') + list(str(list(range(10))))
+    result = ''
+
+    for val in list(new_id.lower()) :
+        if val in per_str :
+            result += val
+
+    result = re.sub(r'\.{2,}', ".", result)
+
+    if (result.startswith('.') or result.endswith('.')) and len(result) > 1 :
+        result = result.replace('.', '', 1)
+    elif len(result) > 0 and len(result) <= 1 :
+        result = result.replace('.', '')
+    
+    if result == '' :
+        result += 'a'
+    
+    if len(result) >= 16 :
+        result = result[0:15]
+
+    if result.endswith('.') :
+        result = result.replace('.', '', 1)
+    
+    while len(result) < 3 :
+        result += result[-1]
+
+    return result
+
+def solution(new_id) :
+    result = ''
+    new_id = new_id.lower()
+
+    for val in new_id :
+        if val in ['-', '_', '.'] or val.isalpha() or val.isdecimal() :
+            result += val
+
+    result = re.sub(r'\.{2,}', '.', result)
+
+    if len(result) > 0 :
+        if len(result) > 1 and result[0] == '.' :
+            result = result[1:]
+        elif result[0] == '.' :
+            result = result.replace('.', '')
+        if len(result) > 1 and result[-1] == '.' :
+            result = result[:-1]
+
+    if result == '' :
+        result += 'a'
+
+    if len(result) >= 16 :
+        result = result[0:15]
+        if result.endswith('.') :
+            result = result[:-1]
+
+    while len(result) < 3 :
+        result += result[-1]
+
+    return result
+
+# 정규식 풀이
+def solution(new_id) :
+    result = new_id.lower()
+    result = re.sub('[^a-z0-9\-_.]', '', result)
+    result = re.sub('\.+', '.', result)
+    result = re.sub('^[.]|[.]$', '', result)
+    result = 'a' if len(result) == 0 else result[:15]
+    result = re.sub('^[.]|[.]$', '', result)
+    result = result if len(result) > 2 else result + ''.join([result[-1] for i in range(3 - len(result))])
+
+    return result
+
+# 실패율
+# 규칙
+# 스테이지에 도달했으나 못깬 플레이어 수 / 스테이지에 도달한 플레이어수
+# 전체 스테이지의 수 = N
+# 실패율이 높은 스테이지부터 내림차순으로 반환
+
+# 조건
+# 1 <= N <= 500
+# 1 <= len(stage) <= 200000
+# 1 <= stage <= N + 1
+# N + 1은 마지막 스테이지까지 클리어한 유저
+# 실패율이 같은 경우 작은수가 먼저
+# 도달한 유저가 없는 경우 해당 스페이지의 실패율은 0
+
+# input / output
+# N	stages	                    result
+# 5	[2, 1, 2, 6, 2, 4, 3, 3]	[3,4,2,1,5]
+# 4	[4,4,4,4,4]	                [4,1,2,3]
+
+# O(N)
+def solution(N, stages) :
+    tmp_dict = dict.fromkeys(range(1, N + 2), 0)
+    tmp = dict.fromkeys(range(1, N + 1), 0)
+    set_stage = list(set(stages))
+
+    for val in stages :
+        if val in tmp_dict.keys() :
+            tmp_dict[val] += 1
+
+    for val in set_stage :
+        if val > N :
+            set_stage.pop(set_stage.index(val))
+            set_stage.append(N)
+
+    for val in set_stage :
+        if tmp_dict[val] != 0 :
+            tmp[val] = (tmp_dict[val] / len(stages))
+        else :
+            tmp[val] = 0
+        for _ in range(tmp_dict[val]) :
+            stages.pop(stages.index(val))
+
+    sorted_dict = sorted(tmp.items(), reverse=True, key=lambda item: item[1])
+
+    return [key for key, _ in sorted_dict]
+
+# 시간복잡도 개선 코드 O(NlogN)
+def solution(N, stages) :
+    failures = [0] * (N + 2)
+    total_players = len(stages)
+    failure_rates = {}
+
+    for stage in stages:
+        failures[stage] += 1
+
+    for stage in range(1, N + 1):
+        if total_players > 0:
+            failure_rate = failures[stage] / total_players
+            failure_rates[stage] = failure_rate
+            total_players -= failures[stage]
+        else:
+            failure_rates[stage] = 0
+
+    return sorted(failure_rates, key=failure_rates.get, reverse=True)
+
 if __name__  == '__main__' :
     # print(solution('2022.05.19', ["A 6", "B 12", "C 3"], ["2021.05.02 A", "2021.07.01 B", "2022.02.19 C", "2022.02.20 C"]))
     # print(solution("2020.01.01", ["Z 3", "D 5"], ["2019.01.01 D", "2019.11.15 Z", "2019.08.02 D", "2019.07.01 D", "2018.12.28 Z"]))
     # print(solution(["AN", "CF", "MJ", "RT", "NA"], [5, 3, 2, 7, 5]))
     # print(solution(["TR", "RT", "TR"], [7, 1, 3]))
-    print(solution(["muzi", "frodo", "apeach", "neo"], ["muzi frodo","apeach frodo","frodo neo","muzi neo","apeach muzi"], 2))
-    print(solution(["con", "ryan"], ["ryan con", "ryan con", "ryan con", "ryan con"], 3))
+    # print(solution(["muzi", "frodo", "apeach", "neo"], ["muzi frodo","apeach frodo","frodo neo","muzi neo","apeach muzi"], 2))
+    # print(solution(["con", "ryan"], ["ryan con", "ryan con", "ryan con", "ryan con"], 3))
+    # print(solution("one4seveneight"))
+    # print(solution("1234"))
+    # print(solution("...!@BaT#*..y.abcdefghijklm"))
+    # print(solution("z-+.^."))
+    # print(solution("=.="))
+    # print(solution("123_.def"))
+    # print(solution("abcdefghijklmn.p"))
+    # print(solution(" .. .... "))
+    # print(solution("\t"))
+    # print(solution(" "))
+    # print(solution("ABE"))
+    print(solution(5, [2, 1, 2, 6, 2, 4, 3, 3]))
+    print(solution(4, [4,4,4,4,4]))
+    # print(solution())
     pass

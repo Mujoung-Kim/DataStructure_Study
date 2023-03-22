@@ -418,11 +418,77 @@ def solution(id_list, report, k) :
 
     # return result
 
+# 숫자 문자열과 영단어
+# 규칙
+# 숫자의 일부 자릿수를 영단어로 바꾼다.
+# 일부 숫자는 바뀌거나 바뀌지 않거나 ㅁ?ㄹ
+# 바꾸기 전의 값을 그대로 반환해라.
+
+# 조건
+# 1 <= len(s) <= 50
+# s는 zero or 0으로 시작하지 않는다.
+# 1 <= s <= 2000000000
+# s -> int
+# 10초안에 결과 도출
+
+# input / output
+# s                     result
+# "one4seveneight"	    1478
+# "23four5six7"	        234567
+# "2three45sixseven"    234567
+# "123"	                123
+
+# 일단 시간복잡도는 개나 줬음
+def solution(s) :
+    alpha_list = {'zero' : 0, 'one' : 1, 'two' : 2, 'three' : 3, 
+                  'four' : 4, 'five' : 5, 'six' : 6, 'seven' : 7, 
+                  'eight' : 8, 'nine' : 9}
+    result, tmp = '', []
+
+    for val in list(s) :
+        if val.isalpha() == True :
+            result += val
+            if result in alpha_list.keys() :
+                tmp.append(alpha_list.get(result))
+                result = result.replace(result, '')
+        elif val.isdecimal() == True :
+            tmp.append(val)
+
+    for val in tmp :
+        result += str(val)
+
+    return int(result)
+
+# 다른 풀이
+def solution(s) :
+    alpha_list = {'zero' : 0, 'one' : 1, 'two' : 2, 'three' : 3, 
+                'four' : 4, 'five' : 5, 'six' : 6, 'seven' : 7, 
+                'eight' : 8, 'nine' : 9}
+    result = s
+
+    for key, value in alpha_list.items() :
+        result = result.replace(key, value)
+
+    return int(result)
+
+# list 풀이
+def solution(s):
+    words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 
+             'seven', 'eight', 'nine']
+
+    for i in range(len(words)):
+        s = s.replace(words[i], str(i))
+
+    return int(s)
+
+
 if __name__  == '__main__' :
     # print(solution('2022.05.19', ["A 6", "B 12", "C 3"], ["2021.05.02 A", "2021.07.01 B", "2022.02.19 C", "2022.02.20 C"]))
     # print(solution("2020.01.01", ["Z 3", "D 5"], ["2019.01.01 D", "2019.11.15 Z", "2019.08.02 D", "2019.07.01 D", "2018.12.28 Z"]))
     # print(solution(["AN", "CF", "MJ", "RT", "NA"], [5, 3, 2, 7, 5]))
     # print(solution(["TR", "RT", "TR"], [7, 1, 3]))
-    print(solution(["muzi", "frodo", "apeach", "neo"], ["muzi frodo","apeach frodo","frodo neo","muzi neo","apeach muzi"], 2))
-    print(solution(["con", "ryan"], ["ryan con", "ryan con", "ryan con", "ryan con"], 3))
+    # print(solution(["muzi", "frodo", "apeach", "neo"], ["muzi frodo","apeach frodo","frodo neo","muzi neo","apeach muzi"], 2))
+    # print(solution(["con", "ryan"], ["ryan con", "ryan con", "ryan con", "ryan con"], 3))
+    # print(solution("one4seveneight"))
+    # print(solution("1234"))
     pass
